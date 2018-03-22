@@ -8,9 +8,9 @@
     </div>
     <div class="row">
         <h2 class="d-block mx-auto">Wszystkich wpisów: {{ filteredCoins.length }}</h2>
-        
         <div class="col-12 text-center my-2">
-        <input type="text" class="form-control mb-2" placeholder="Coin name" v-model="filterCoins">
+        <input type="text" class="form-control mb-2" placeholder="Coin name"
+         v-model="filterCoins">
         <button class="btn btn-primary" @click.prevent="sortRank">SORT Rank</button>
         <button class="btn btn-primary" @click.prevent="sortAlphabet">SORT ABC</button>
         <button class="btn btn-primary" @click.prevent="sortUSD">SORT USD</button>

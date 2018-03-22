@@ -7,13 +7,19 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
   state: {
     loaded: false,
-    apiData: []
+    apiData: [],
+    convert: "",
+    limit: "10"
   },
   actions: {
     getData() {
+      const target = "https://api.coinmarketcap.com/v1/ticker/";
+      let converted = "?convert=" + this.state.convert;
+      let limited = "&limit=" + this.state.limit;
+      let fetch = target + converted + limited;
       return new Promise((resolve, reject) => {
         axios
-          .get("https://api.coinmarketcap.com/v1/ticker/")
+          .get(fetch)
           .then(response => {
             this.state.apiData = response.data;
             this.state.loaded = true;
