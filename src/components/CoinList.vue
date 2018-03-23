@@ -9,15 +9,15 @@
         <button class="btn btn-primary" @click.prevent="sortUSD">SORT {{ waluta }}</button>
         <button class="btn btn-primary" @click.prevent="sortBTC">SORT BTC</button>
         <button class="btn btn-primary ml-4" @click.prevent="reverseDirection">REVERSE ORDER</button>
-        
-        <select v-model="selectedCurrency" @change="refresh">
-          <option disabled>Please select</option>
+      
+        <select v-model="selectedCurrency" @change="refreshCurrency">
+          <option value="" disabled selected hidden>Please select</option>
           <option v-for="(currency, index) in currencies" 
           v-bind:value="currency" :key="index">{{ currency }}</option>
         </select>
-        <select v-model="selectedLimit" @change="refresh">
-          <option disabled>Limit</option>
-          <option v-for="(n, index) in 100" 
+        <select v-model="selectedLimit" @change="refreshLimit">
+          <option value="" disabled selected hidden>Limit</option>
+          <option v-for="(n, index) in limits" 
           v-bind:value="n" :key="index">{{ n }}</option>
         </select>
 
@@ -38,38 +38,39 @@
                   <th scope="row">{{ coin.name }}</th>
                   <td>{{ coin.symbol }}</td>
                   <td>{{ coin.rank }}</td>
-                  <td>{{ coin.price_aud || 
-                        coin.price_brl || 
-                        coin.price_cad || 
-                        coin.price_chf || 
-                        coin.price_clp || 
-                        coin.price_cny || 
-                        coin.price_czk || 
-                        coin.price_dkk || 
-                        coin.price_eur || 
-                        coin.price_gbp || 
-                        coin.price_hkd || 
-                        coin.price_huf || 
-                        coin.price_idr || 
-                        coin.price_ils || 
-                        coin.price_inr || 
-                        coin.price_jpy || 
-                        coin.price_krw || 
-                        coin.price_mxn || 
-                        coin.price_myr || 
-                        coin.price_nok || 
-                        coin.price_nzd || 
-                        coin.price_php || 
-                        coin.price_pkr || 
-                        coin.price_pln || 
-                        coin.price_rub || 
-                        coin.price_sek || 
-                        coin.price_sgd || 
-                        coin.price_thb || 
-                        coin.price_try || 
-                        coin.price_twd || 
-                        coin.price_usd || 
-                        coin.price_zar }}
+                  <td>{{  coin.price_aud || 
+                          coin.price_brl || 
+                          coin.price_cad || 
+                          coin.price_chf || 
+                          coin.price_clp || 
+                          coin.price_cny || 
+                          coin.price_czk || 
+                          coin.price_dkk || 
+                          coin.price_eur || 
+                          coin.price_gbp || 
+                          coin.price_hkd || 
+                          coin.price_huf || 
+                          coin.price_idr || 
+                          coin.price_ils || 
+                          coin.price_inr || 
+                          coin.price_jpy || 
+                          coin.price_krw || 
+                          coin.price_mxn || 
+                          coin.price_myr || 
+                          coin.price_nok || 
+                          coin.price_nzd || 
+                          coin.price_php || 
+                          coin.price_pkr || 
+                          coin.price_pln || 
+                          coin.price_rub || 
+                          coin.price_sek || 
+                          coin.price_sgd || 
+                          coin.price_thb || 
+                          coin.price_try || 
+                          coin.price_twd || 
+                          coin.price_usd || 
+                          coin.price_zar | roundNumber 
+                      }}
                   </td>
                   <td>{{ coin.price_btc }}</td>
                 </tr>
@@ -84,6 +85,7 @@ export default {
   name: "CoinList",
   data() {
     return {
+      limits: ["10", "25", "50", "75", "100"],
       filterCoins: "",
       selectedLimit: "",
       selectedCurrency: "",
@@ -124,8 +126,12 @@ export default {
     };
   },
   methods: {
-    refresh() {
+    refreshCurrency() {
       this.$store.state.convert = this.selectedCurrency;
+      this.$store.state.loaded = false;
+      this.$store.dispatch("getData");
+    },
+    refreshLimit() {
       this.$store.state.limit = this.selectedLimit;
       this.$store.state.loaded = false;
       this.$store.dispatch("getData");
@@ -170,6 +176,12 @@ export default {
           element.symbol.toLowerCase().match(this.filterCoins.toLowerCase())
         );
       });
+    }
+  },
+  filters: {
+    roundNumber: function(value) {
+      if (!value) return "";
+      return Number(value).toFixed(2);
     }
   }
 };
