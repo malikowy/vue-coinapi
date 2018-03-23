@@ -21,15 +21,15 @@
                 <th scope="col">Wartość BTC</th>
               </tr>
             </thead>
-            <tbody>
-                <tr v-for="(coin, index) in filteredCoins" :key="index">
+             <transition-group name="slide" tag="tbody">
+              <tr v-for="(coin, index) in filteredCoins" :key="index">
                   <th scope="row">{{ coin.name }}</th>
                   <td>{{ coin.symbol }}</td>
                   <td>{{ coin.rank }}</td>
                   <td>{{ coin.price_usd }}</td>
                   <td>{{ coin.price_btc }}</td>
                 </tr>
-            </tbody>
+                </transition-group> 
         </table>
         </div>
     </div>
@@ -101,5 +101,20 @@ ul {
     border: 1px solid red;
     flex: 1;
   }
+}
+
+.slide-leave-active,
+.slide-enter-active {
+  transition: 1s;
+}
+.slide-enter {
+  transform: translate(0, 50%);
+}
+.slide-leave-to {
+  transform: translate(0, -50%);
+  opacity: 0;
+}
+.slide-move {
+  transition: 0.3s;
 }
 </style>
