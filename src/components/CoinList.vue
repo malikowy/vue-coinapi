@@ -1,26 +1,28 @@
 <template>
     <div class="row">
         <h2 class="d-block mx-auto">Wszystkich wpisów: {{ filteredCoins.length }}</h2>
-        <div class="col-12 text-center my-2">
-        <input type="text" class="form-control mb-2" placeholder="Coin name"
-         v-model="filterCoins">
-        <button class="btn btn-primary" @click.prevent="sortRank">SORT Rank</button>
-        <button class="btn btn-primary" @click.prevent="sortAlphabet">SORT Abc</button>
-        <button class="btn btn-primary" @click.prevent="sortUSD">SORT {{ waluta }}</button>
-        <button class="btn btn-primary" @click.prevent="sortBTC">SORT BTC</button>
-        <button class="btn btn-primary ml-4" @click.prevent="reverseDirection">REVERSE ORDER</button>
-      
-        <select v-model="selectedCurrency" @change="refreshCurrency">
-          <option value="" disabled selected hidden>Please select</option>
-          <option v-for="(currency, index) in currencies" 
-          v-bind:value="currency" :key="index">{{ currency }}</option>
-        </select>
-        <select v-model="selectedLimit" @change="refreshLimit">
-          <option value="" disabled selected hidden>Limit</option>
-          <option v-for="(n, index) in limits" 
-          v-bind:value="n" :key="index">{{ n }}</option>
-        </select>
-
+        <div class="col-12 text-center mt-2">
+          <input type="text" class="form-control mb-2" placeholder="Coin name"
+          v-model="filterCoins">
+          <div class="input-group mb-3">
+            <select class="custom-select" v-model="selectedCurrency" @change="refreshCurrency">
+              <option value="" disabled selected hidden>Please select</option>
+              <option v-for="(currency, index) in currencies" 
+              v-bind:value="currency" :key="index">{{ currency }}</option>
+            </select>
+            <select class="custom-select" v-model="selectedLimit" @change="refreshLimit">
+              <option value="" disabled selected hidden>Limit</option>
+              <option v-for="(n, index) in limits" 
+              v-bind:value="n" :key="index">{{ n }}</option>
+            </select>
+          </div>
+        </div>        
+        <div class="col-12 text-center mb-3">      
+          <button class="btn btn-primary" @click.prevent="sortRank">SORT Rank</button>
+          <button class="btn btn-primary" @click.prevent="sortAlphabet">SORT Abc</button>
+          <button class="btn btn-primary" @click.prevent="sortUSD">SORT {{ waluta }}</button>
+          <button class="btn btn-primary" @click.prevent="sortBTC">SORT BTC</button>
+          <button class="btn btn-primary ml-4" @click.prevent="reverseDirection">REVERSE ORDER</button>
         </div>
         <div class="col-12">
           <table class="table table-hover">
@@ -122,7 +124,8 @@ export default {
         "TWD",
         "USD",
         "ZAR"
-      ]
+      ],
+      sorted: [{ abc: false }, { currency: false }, { btc: false }]
     };
   },
   methods: {
