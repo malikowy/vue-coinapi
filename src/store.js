@@ -8,8 +8,8 @@ export const store = new Vuex.Store({
   state: {
     loaded: false,
     apiData: [],
-    convert: "",
-    limit: "10"
+    convert: "USD",
+    limit: ""
   },
   actions: {
     getData() {
@@ -17,6 +17,7 @@ export const store = new Vuex.Store({
       let converted = "?convert=" + this.state.convert;
       let limited = "&limit=" + this.state.limit;
       let fetch = target + converted + limited;
+      console.log(fetch);
       return new Promise((resolve, reject) => {
         axios
           .get(fetch)

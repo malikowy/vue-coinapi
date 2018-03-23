@@ -16,9 +16,7 @@ new Vue({
     App
   },
   mounted() {
-    this.$store.dispatch("getData").then(() => {
-      console.log("Data loaded = " + this.$store.state.loaded);
-    });
+    this.$store.dispatch("getData");
   },
   render: h => h(App)
 });

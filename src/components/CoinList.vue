@@ -5,10 +5,22 @@
         <input type="text" class="form-control mb-2" placeholder="Coin name"
          v-model="filterCoins">
         <button class="btn btn-primary" @click.prevent="sortRank">SORT Rank</button>
-        <button class="btn btn-primary" @click.prevent="sortAlphabet">SORT ABC</button>
-        <button class="btn btn-primary" @click.prevent="sortUSD">SORT USD</button>
+        <button class="btn btn-primary" @click.prevent="sortAlphabet">SORT Abc</button>
+        <button class="btn btn-primary" @click.prevent="sortUSD">SORT {{ waluta }}</button>
         <button class="btn btn-primary" @click.prevent="sortBTC">SORT BTC</button>
         <button class="btn btn-primary ml-4" @click.prevent="reverseDirection">REVERSE ORDER</button>
+        
+        <select v-model="selectedCurrency" @change="refresh">
+          <option disabled>Please select</option>
+          <option v-for="(currency, index) in currencies" 
+          v-bind:value="currency" :key="index">{{ currency }}</option>
+        </select>
+        <select v-model="selectedLimit" @change="refresh">
+          <option disabled>Limit</option>
+          <option v-for="(n, index) in 100" 
+          v-bind:value="n" :key="index">{{ n }}</option>
+        </select>
+
         </div>
         <div class="col-12">
           <table class="table table-hover">
@@ -17,7 +29,7 @@
                 <th scope="col">Nazwa</th>
                 <th scope="col">Symbol</th>
                 <th scope="col">Ranga</th>
-                <th scope="col">Wartość USD</th>
+                <th scope="col">Wartość {{ waluta }}</th>
                 <th scope="col">Wartość BTC</th>
               </tr>
             </thead>
@@ -26,7 +38,39 @@
                   <th scope="row">{{ coin.name }}</th>
                   <td>{{ coin.symbol }}</td>
                   <td>{{ coin.rank }}</td>
-                  <td>{{ coin.price_usd }}</td>
+                  <td>{{ coin.price_aud || 
+                        coin.price_brl || 
+                        coin.price_cad || 
+                        coin.price_chf || 
+                        coin.price_clp || 
+                        coin.price_cny || 
+                        coin.price_czk || 
+                        coin.price_dkk || 
+                        coin.price_eur || 
+                        coin.price_gbp || 
+                        coin.price_hkd || 
+                        coin.price_huf || 
+                        coin.price_idr || 
+                        coin.price_ils || 
+                        coin.price_inr || 
+                        coin.price_jpy || 
+                        coin.price_krw || 
+                        coin.price_mxn || 
+                        coin.price_myr || 
+                        coin.price_nok || 
+                        coin.price_nzd || 
+                        coin.price_php || 
+                        coin.price_pkr || 
+                        coin.price_pln || 
+                        coin.price_rub || 
+                        coin.price_sek || 
+                        coin.price_sgd || 
+                        coin.price_thb || 
+                        coin.price_try || 
+                        coin.price_twd || 
+                        coin.price_usd || 
+                        coin.price_zar }}
+                  </td>
                   <td>{{ coin.price_btc }}</td>
                 </tr>
                 </transition-group> 
@@ -40,10 +84,52 @@ export default {
   name: "CoinList",
   data() {
     return {
-      filterCoins: ""
+      filterCoins: "",
+      selectedLimit: "",
+      selectedCurrency: "",
+      currencies: [
+        "AUD",
+        "BRL",
+        "CAD",
+        "CHF",
+        "CLP",
+        "CNY",
+        "CZK",
+        "DKK",
+        "EUR",
+        "GBP",
+        "HKD",
+        "HUF",
+        "IDR",
+        "ILS",
+        "INR",
+        "JPY",
+        "KRW",
+        "MXN",
+        "MYR",
+        "NOK",
+        "NZD",
+        "PHP",
+        "PKR",
+        "PLN",
+        "RUB",
+        "SEK",
+        "SGD",
+        "THB",
+        "TRY",
+        "TWD",
+        "USD",
+        "ZAR"
+      ]
     };
   },
   methods: {
+    refresh() {
+      this.$store.state.convert = this.selectedCurrency;
+      this.$store.state.limit = this.selectedLimit;
+      this.$store.state.loaded = false;
+      this.$store.dispatch("getData");
+    },
     reverseDirection() {
       return this.$store.state.apiData.reverse();
     },
@@ -73,6 +159,9 @@ export default {
   computed: {
     coins() {
       return this.$store.state.apiData;
+    },
+    waluta() {
+      return this.$store.state.convert;
     },
     filteredCoins() {
       return this.$store.state.apiData.filter(element => {
