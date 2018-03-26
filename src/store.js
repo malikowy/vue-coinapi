@@ -17,7 +17,7 @@ export const store = new Vuex.Store({
       let converted = "?convert=" + this.state.convert;
       let limited = "&limit=" + this.state.limit;
       let fetch = target + converted + limited;
-      console.log(fetch);
+      // console.log(fetch);
       return new Promise((resolve, reject) => {
         axios
           .get(fetch)

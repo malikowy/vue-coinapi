@@ -18,10 +18,10 @@
           </div>
         </div>        
         <div class="col-12 text-center mb-3">      
-          <button class="btn btn-primary" @click.prevent="sortRank">SORT Rank</button>
-          <button class="btn btn-primary" @click.prevent="sortAlphabet">SORT Abc</button>
-          <button class="btn btn-primary" @click.prevent="sortUSD">SORT {{ waluta }}</button>
-          <button class="btn btn-primary" @click.prevent="sortBTC">SORT BTC</button>
+          <button class="btn btn-primary" @click="sortRank">SORT by rank</button>
+          <button class="btn btn-primary" @click="sortAlphabet">SORT alphabetically</button>
+          <button class="btn btn-primary" @click="sortUSD">SORT by {{ waluta }}</button>
+          <button class="btn btn-primary" @click="sortBTC">SORT by BTC value</button>
         </div>
         <div class="col-12">
           <table class="table table-hover">
@@ -34,12 +34,12 @@
                 <th scope="col">Wartość BTC</th>
               </tr>
             </thead>
-             <transition-group name="slide" tag="tbody">
+             <transition-group name="slide" tag="tbody" mode="out-in" v-if="filteredCoins.length > 0">
               <tr v-for="(coin, index) in filteredCoins" :key="index">
-                  <th scope="row">{{ coin.name }}</th>
-                  <td>{{ coin.symbol }}</td>
-                  <td>{{ coin.rank }}</td>
-                  <td>{{  coin.price_aud || 
+                <th scope="row">{{ coin.name }}</th>
+                 <td>{{ coin.symbol }}</td>
+                 <td>{{ coin.rank }}</td>
+                 <td>{{  coin.price_aud || 
                           coin.price_brl || 
                           coin.price_cad || 
                           coin.price_chf || 
@@ -74,9 +74,16 @@
                       }}
                   </td>
                   <td>{{ coin.price_btc }}</td>
-                </tr>
-                </transition-group> 
-        </table>
+              </tr>
+            </transition-group> 
+                
+            <tbody v-else>
+              <tr>
+                <th colspan="5" class="text-center">
+                Brak elementów do wyświetlenia</th>
+              </tr>
+            </tbody>
+          </table>
         </div>
     </div>
 </template>
@@ -244,16 +251,16 @@ ul {
 
 .slide-leave-active,
 .slide-enter-active {
-  transition: 1s;
+  transition: 0.3s;
 }
 .slide-enter {
-  transform: translate(0, 50%);
+  transform: translate(0, 25%);
 }
 .slide-leave-to {
-  transform: translate(0, -50%);
+  transform: translate(0, -25%);
   opacity: 0;
 }
 .slide-move {
-  transition: 0.3s;
+  transition: all 0.3s;
 }
 </style>
