@@ -9,7 +9,7 @@ export const store = new Vuex.Store({
     loaded: false,
     apiData: [],
     convert: "USD",
-    limit: ""
+    limit: "100"
   },
   actions: {
     getData() {

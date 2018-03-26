@@ -14,30 +14,30 @@
 </template>
 
 <script>
-import CoinList from "./components/CoinList.vue";
+import CoinList from './components/CoinList.vue';
 
 export default {
-  name: "App",
-  components: {
-    coinList: CoinList
-  },
-  computed: {
-    loaded() {
-      return this.$store.state.loaded;
-    }
-  }
+	name: 'App',
+	components: {
+		coinList: CoinList
+	},
+	computed: {
+		loaded() {
+			return this.$store.state.loaded;
+		}
+	}
 };
 </script>
 <style>
 .slide-fade-enter-active {
-  transition: all 0.3s ease;
+	transition: all 0.3s ease;
 }
 .slide-fade-leave-active {
-  transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1);
+	transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1);
 }
 .slide-fade-enter,
 .slide-fade-leave-to {
-  transform: translateX(-2rem) scale(0.95);
-  opacity: 0.55;
+	/* transform: translateX(-2rem) scale(0.95); */
+	opacity: 0.5;
 }
 </style>

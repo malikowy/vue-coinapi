@@ -22,7 +22,6 @@
           <button class="btn btn-primary" @click.prevent="sortAlphabet">SORT Abc</button>
           <button class="btn btn-primary" @click.prevent="sortUSD">SORT {{ waluta }}</button>
           <button class="btn btn-primary" @click.prevent="sortBTC">SORT BTC</button>
-          <button class="btn btn-primary ml-4" @click.prevent="reverseDirection">REVERSE ORDER</button>
         </div>
         <div class="col-12">
           <table class="table table-hover">
@@ -125,7 +124,12 @@ export default {
         "USD",
         "ZAR"
       ],
-      sorted: [{ abc: false }, { currency: false }, { btc: false }]
+      sorted: {
+        rank: true,
+        letters: true,
+        currency: true,
+        btc: true
+      }
     };
   },
   methods: {
@@ -139,30 +143,61 @@ export default {
       this.$store.state.loaded = false;
       this.$store.dispatch("getData");
     },
-    reverseDirection() {
-      return this.$store.state.apiData.reverse();
-    },
     sortAlphabet() {
-      return this.$store.state.apiData.sort(function(a, b) {
-        if (a.name < b.name) return -1;
-        if (a.name > b.name) return 1;
-        return 0;
-      });
+      if (!this.sorted.letters) {
+        this.sorted.letters = true;
+        return this.$store.state.apiData.sort(function(a, b) {
+          if (a.name < b.name) return 1;
+          if (a.name > b.name) return -1;
+          return 0;
+        });
+      } else {
+        this.sorted.letters = false;
+        return this.$store.state.apiData.sort(function(a, b) {
+          if (a.name < b.name) return -1;
+          if (a.name > b.name) return 1;
+          return 0;
+        });
+      }
     },
     sortRank() {
-      return this.$store.state.apiData.sort(function(a, b) {
-        return a.rank - b.rank;
-      });
+      if (!this.sorted.rank) {
+        this.sorted.rank = true;
+        return this.$store.state.apiData.sort(function(a, b) {
+          return b.rank - a.rank;
+        });
+      } else {
+        this.sorted.rank = false;
+        return this.$store.state.apiData.sort(function(a, b) {
+          return a.rank - b.rank;
+        });
+      }
     },
     sortUSD() {
-      return this.$store.state.apiData.sort(function(a, b) {
-        return b.price_usd - a.price_usd;
-      });
+      if (!this.sorted.currency) {
+        this.sorted.currency = true;
+        return this.$store.state.apiData.sort(function(a, b) {
+          return a.price_usd - b.price_usd;
+        });
+      } else {
+        this.sorted.currency = false;
+        return this.$store.state.apiData.sort(function(a, b) {
+          return b.price_usd - a.price_usd;
+        });
+      }
     },
     sortBTC() {
-      return this.$store.state.apiData.sort(function(a, b) {
-        return b.price_btc - a.price_btc;
-      });
+      if (!this.sorted.btc) {
+        this.sorted.btc = true;
+        return this.$store.state.apiData.sort(function(a, b) {
+          return a.price_btc - b.price_btc;
+        });
+      } else {
+        this.sorted.btc = false;
+        return this.$store.state.apiData.sort(function(a, b) {
+          return b.price_btc - a.price_btc;
+        });
+      }
     }
   },
   computed: {
